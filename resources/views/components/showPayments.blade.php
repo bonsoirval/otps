@@ -5,30 +5,26 @@
                           <th>Transaction ID</th>
                           <th>Amount</th>
                           <th>Status</th>
-                          <th>Action</th>
+                          <th>Payment Date</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>@mdo</td>
-                          <td>[download]</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>@fat</td>
-                          <td>[download]</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Larry</td>
-                          <td>the Bird</td>
-                          <td>@twitter</td>
-                          <td>[download]</td>
-                        </tr>
+                        @if(sizeof($myPayment) >= 1)
+                        <?php $counter = 1;?>
+                            @foreach($myPayment as $payment)
+                                <tr>
+                                  <th scope="row">{{$counter}}</th>
+                                  <td>{{$payment->txtref}}</td>
+                                  <td>{{$payment->amount}}</td>
+                                  <td>{{$payment->status}}</td>
+                                  <td>{{$payment->created_at}}</td>
+                                </tr>
+                                <?php $counter += 1; ?>
+                            @endforeach
+                            <tr><td colspan="5">{{ $myPayment->links() }}</td></tr>
+                        @else
+                          <p>Hello para</p>
+                        @endif
+
                       </tbody>
                     </table>

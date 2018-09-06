@@ -39,7 +39,11 @@ class AlumniController extends Controller
     }
     public function showApplications()
     {
-      $applications = DB::table('transcript_applications')->select('alumni_id','recipient', 'recipient_address','country_id', 'status')->where('alumni_id', Auth::user()->id)->paginate(5); //->get();
+      $applications = DB::table('transcript_applications')
+      ->select('alumni_id','recipient', 'recipient_address','country_id', 'status')
+      ->where('alumni_id', Auth::user()->id)
+      ->orderBy('id', 'desc')
+      ->paginate(5); //->get();
       //$applications = json_decode(json_encode($applications)); //it will return you stdclass object
       //$applications = json_decode(json_encode($applications),true); //it will return you data in array
       //echo '<pre>'; print_r($countries);
@@ -50,47 +54,41 @@ class AlumniController extends Controller
     {
         if($transcript_status == 'completed')
         {
-          echo "Download";
+          echo "<a href='#' title='Download Student Copy'>Download</a>";
         }
         else{
+          ?>
+          <input type="text" readonly value="Transcript Not Ready" class="btn-danger">
+          <?php
         }
         //echo "<br/><b>$args </b><br/>";
     }
     public function showPayments()
     {
-      return view('alumni.showPayments');
+          $myPayment = DB::table('payments')->select("*")->where('alumni_id', Auth::user()->id)->orderBy('id', 'desc')->paginate(5); //->get();
+          //$myPayment = json_decode(json_encode($myPayment)); //it will return you stdclass object
+          //$myPayment = json_decode(json_encode($myPayment),true); //it will return you data in array
+
+          return view('alumni.showPayments', compact('myPayment'));
     }
+
+
     public function paymentProcessor()
     {
         $payment = DB::table('payments')->select("*")->where('alumni_id', Auth::user()->id)->get();
         $payment = json_decode(json_encode($payment)); //it will return you stdclass object
         $payment = json_decode(json_encode($payment),true); //it will return you data in array
-        //echo '<pre>'; print_r($countries);
-        //echo "Signature : ".$payment->signature;
-        /*
-        "id" => 2
-    "" => 4298
-    "transaction_id" => null
-    "customerid" => "bonsoirval@gmail.com1"
-    "alumni_id" => "bonsoirval@gmail.com1"
-    "amount" => 25000
-    "created_at" => "2018-09-02 09:57:57"
-    "updated_at" => "2018-09-02 09:57:57"
-    "key" => "aa863303b0ee79459162ad55a3aed4f0"
-    "txtref" => "5b8c169528583"
-    "data" => "aa863303b0ee79459162ad55a3aed4f05b8c16952858325000"
-    "memo" => "Payment for transcript"
-    "signature" => "785309cd677ffbadf3137e2295c1981adcb7ea8d1cbcd1d39f94a75aba9dc5cd"*/
-    $mertid;
-    $cetxtref;
-    $type = '';
-    $signature;
-    foreach($payment as $paymentDetail)
-    {
-        $mertid = $paymentDetail['mertid'];
-        $cetxtref = $paymentDetail['txtref'];
-        $signature = $paymentDetail['signature'];
-    }
+
+        $mertid;
+        $cetxtref;
+        $type = '';
+        $signature;
+        foreach($payment as $paymentDetail)
+        {
+            $mertid = $paymentDetail['mertid'];
+            $cetxtref = $paymentDetail['txtref'];
+            $signature = $paymentDetail['signature'];
+        }
         //dd($payment);
         $request = 'mertid='.$mertid.'&transref='.$cetxtref.'&respformat='.$type.'&signature='.$this->signature; //initialize the request variables
         $url = 'https://www.cashenvoy.com/sandbox2/?cmd=requery'; //this is the url of the gateway's test api
@@ -116,6 +114,16 @@ class AlumniController extends Controller
                 'status' =>'processing',
               ]
           );
+
+          DB::table('payments')
+          ->where('txtref', $cetxtref)
+          ->where('alumni_id', Auth::user()->id)
+          ->update(
+                [
+                  'status' =>'completed',
+                ]
+            );
+
           //set flash message
           $status = False;
           if ($split_response[1] == 'C00')

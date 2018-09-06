@@ -7,8 +7,8 @@
                 <div class="panel-heading">USER Dashboard</div>
 
                 <div class="panel-body">
-                  @component('components.showPayments')
-                  @endcomponent
+                    @component('components.showPayments', ['myPayment' => $myPayment])
+                    @endcomponent
                 </div>
             </div>
         </div>

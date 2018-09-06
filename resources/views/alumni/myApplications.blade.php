@@ -46,7 +46,6 @@
                       @endif
                       <tr><td colspan="5">{{ $applications->links() }}</td></tr>
                     </tbody>
-                    {{ $applications->links() }}
                   </table>
 
                 </div>
