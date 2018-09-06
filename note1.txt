@@ -1,0 +1,27 @@
+﻿Response Codes
+C00 = CashEnvoy transaction successful.
+C01 = User cancellation.
+C02 = User cancellation by inactivity.
+C03 = No transaction record.
+C04 = Insufficient funds.
+C05 = Transaction failed. Contact support@cashenvoy.com for more information.
+C07 = Transaction refunded.
+
+Test Cards (Local & Intl Payment)
+International
+-	Success 	5200 0502 8895 7402
+-	Fail 		4060 6325 8428 4185
+Local
+-	Success 	5399 8373 2202 0390
+-	Fail 		5521 6044 3202 4410
+For CVV, EXPIRY, PIN or BVN use any numbers
+
+Test Accounts (Wallet Payment)
+testaccount@xyz.com - Successful transaction - C00
+testaccount2@xyz.com - Insufficient Funds - C04
+testaccount3@xyz.com - No transaction record - C03
+testaccount4@xyz.com - Transaction failed. Contact support@cashenvoy.com for more information - C05
+Pin = 111111 (for all accounts)
+Password = cashenvoy (for all accounts)
+•	To test for C01 click on the cancel link on the payment interface.
+•	To test for C02 leave the payment interface unattended to for 30 minutes.
