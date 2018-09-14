@@ -1,3 +1,14 @@
+in showApplication
+the system checks if the transcript has been compiled, if yes, displays reprint and else shows compile
+
+
+
+https://github.com/niklasravnsborg/laravel-pdf
+https://github.com/anam-hossain/phantommagick
+
+
+If a new application not yet compiled is available, a NEW symbol shows
+
 Response Codes
 C00 = CashEnvoy transaction successful.
 C01 = User cancellation.

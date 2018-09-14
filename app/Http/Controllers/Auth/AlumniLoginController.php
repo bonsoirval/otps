@@ -39,6 +39,6 @@ class AlumniLoginController extends Controller
     public function logout()
     {
         Auth::guard('alumni')->logout();
-        return redirect('/');
+        return redirect('/alumni');
     }
 }

@@ -23,7 +23,6 @@
                             @endforeach
                             <tr><td colspan="5">{{ $myPayment->links() }}</td></tr>
                         @else
-                          <p>Hello para</p>
                         @endif
 
                       </tbody>
